@@ -9,7 +9,7 @@ data class Pelicula(
     val paisOrigen: String,
     val clasificacionEdad: String,
     val rating: Float,
-    val actoresPrincipales: String,
+    val actorPrincipal: String,
     val sinopsis: String,
     val fechaVisualizacion: String,
     val esFavorita: Boolean,

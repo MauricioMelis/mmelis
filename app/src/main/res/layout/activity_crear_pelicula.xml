@@ -39,8 +39,8 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="28dp"
-        android:textSize="15dp"
         android:text="Título: "
+        android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
@@ -64,9 +64,9 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="28dp"
-        android:textSize="15dp"
-
         android:text="Director: "
+
+        android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
 
@@ -88,8 +88,8 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="28dp"
-        android:textSize="15dp"
         android:text="Año de \nlanzamiento"
+        android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewDirector" />
 
@@ -99,9 +99,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="24dp"
-        android:textSize="15dp"
         android:hint=" Ingrese el año"
         android:inputType="number"
+        android:textSize="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.873"
         app:layout_constraintStart_toEndOf="@+id/textViewTitulo"
@@ -113,8 +113,8 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="60dp"
-        android:textSize="15dp"
         android:text="Género"
+        android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewAñoLanzamiento" />
 
@@ -179,8 +179,8 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="45dp"
-        android:textSize="15dp"
         android:text="Duración"
+        android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewGenero" />
 
@@ -202,8 +202,8 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="45dp"
-        android:textSize="15dp"
         android:text="País"
+        android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewDuracion" />
 
@@ -234,8 +234,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="120dp"
-        android:textSize="15dp"
         android:text="ToggleButton"
+        android:textSize="15dp"
         app:layout_constraintBottom_toBottomOf="@+id/textClasificacionEdad"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textClasificacionEdad"
@@ -247,8 +247,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="45dp"
-        android:textSize="15dp"
         android:text="Rating"
+        android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textClasificacionEdad" />
 
@@ -263,6 +263,35 @@
         app:layout_constraintBottom_toBottomOf="@+id/textViewRating"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textViewRating" />
+
+    <ImageButton
+        android:id="@+id/imageButtonNext"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="21dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#A2E046"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@android:drawable/ic_menu_directions" />
+
+    <ImageButton
+        android:id="@+id/imageButtonCancel"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="@color/design_default_color_error"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonNext"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewRating"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@android:drawable/btn_dialog" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
