@@ -41,6 +41,7 @@
         android:layout_marginTop="28dp"
         android:text="Título: "
         android:textSize="15dp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
 
@@ -64,8 +65,8 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="28dp"
+        android:textStyle="bold"
         android:text="Director: "
-
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewTitulo" />
@@ -88,6 +89,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="28dp"
+        android:textStyle="bold"
         android:text="Año de \nlanzamiento"
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -113,13 +115,14 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="60dp"
+        android:textStyle="bold"
         android:text="Género"
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewAñoLanzamiento" />
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/etGenero"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -179,6 +182,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="45dp"
+        android:textStyle="bold"
         android:text="Duración"
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -202,6 +206,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="45dp"
+        android:textStyle="bold"
         android:text="País"
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -225,6 +230,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="45dp"
+        android:textStyle="bold"
         android:text="Clasificación\nde edad"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewPais" />
@@ -247,13 +253,14 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="45dp"
+        android:textStyle="bold"
         android:text="Rating"
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textClasificacionEdad" />
 
     <RatingBar
-        android:id="@+id/ratingBar"
+        android:id="@+id/etRating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
@@ -274,7 +281,7 @@
         android:backgroundTint="#A2E046"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar"
+        app:layout_constraintTop_toBottomOf="@+id/etRating"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@android:drawable/ic_menu_directions" />
 

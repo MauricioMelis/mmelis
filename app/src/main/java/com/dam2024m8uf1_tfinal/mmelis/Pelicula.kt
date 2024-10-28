@@ -16,3 +16,19 @@ data class Pelicula(
     val tieneSubtitulos: Boolean,
     val esOriginal: Boolean
 )
+
+class PeliculaRepository {
+    private val peliculas = mutableListOf<Pelicula>()
+
+    fun agregarPelicula(pelicula: Pelicula) {
+        peliculas.add(pelicula)
+    }
+
+    fun obtenerPeliculas(): List<Pelicula> {
+        return peliculas
+    }
+
+    fun eliminarPelicula(pelicula: Pelicula) {
+        peliculas.remove(pelicula)
+    }
+}

@@ -38,6 +38,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="28dp"
+        android:textStyle="bold"
         android:textSize="15dp"
         android:text="Actor\nprincipal: "
         app:layout_constraintStart_toStartOf="parent"
@@ -60,6 +61,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
+        android:textStyle="bold"
         android:text="Sinopsis: "
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -85,6 +87,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
+        android:textStyle="bold"
         android:text="Fecha: "
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,6 +111,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
+        android:textStyle="bold"
         android:text="Favorita: "
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -131,13 +135,14 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
+        android:textStyle="bold"
         android:text="Subtítulos: "
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewFavorita" />
 
     <RadioGroup
-        android:id="@+id/radioGroupSubtitulos"
+        android:id="@+id/etSubtitulos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -168,6 +173,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
+        android:textStyle="bold"
         android:text="Audio\noriginal: "
         android:textSize="15dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -182,18 +188,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.567"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textViewOriginal" />
+        app:layout_constraintTop_toTopOf="@+id/textViewOriginal"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
 
     <ImageButton
-        android:id="@+id/imageButtonCancel"
+        android:id="@+id/etCancel"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="@color/design_default_color_error"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton"
+        app:layout_constraintEnd_toStartOf="@+id/etAñadir"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etOriginal"
@@ -201,7 +208,7 @@
         app:srcCompat="@android:drawable/btn_dialog" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/etAñadir"
         android:layout_width="50dp"
         android:layout_height="50dp"
 
