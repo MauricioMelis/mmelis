@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- Barra superior -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
@@ -34,37 +34,46 @@
             app:layout_constraintVertical_bias="1.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <!-- RecyclerView para mostrar la lista de películas -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewPeliculas"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toTopOf="@id/buttonLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/constraintLayout">
+        app:layout_constraintTop_toBottomOf="@id/constraintLayout" />
+
+    <!-- Layout de botones para añadir, editar y eliminar -->
+    <LinearLayout
+        android:id="@+id/buttonLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <Button
-            android:id="@+id/btnCrear"
-            android:layout_width="155dp"
-            android:layout_height="50dp"
-            android:backgroundTint="#90CEE4"
-            android:text="Crear Película" />
+            android:id="@+id/buttonDelete"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Eliminar" />
 
         <Button
-            android:id="@+id/btnEditar"
-            android:layout_width="155dp"
-            android:layout_height="50dp"
-            android:backgroundTint="#90CEE4"
-            android:text="Editar Película" />
+            android:id="@+id/buttonEdit"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Editar" />
 
         <Button
-            android:id="@+id/btnEliminar"
-            android:layout_width="155dp"
-            android:layout_height="50dp"
-            android:backgroundTint="#90CEE4"
-            android:text="Eliminar Película" />
+            android:id="@+id/buttonAdd"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Añadir" />
     </LinearLayout>
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

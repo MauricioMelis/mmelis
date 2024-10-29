@@ -201,6 +201,18 @@
         app:layout_constraintTop_toTopOf="@+id/textViewDuracion" />
 
     <TextView
+        android:id="@+id/textViewDuracionValor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Duración: 0"
+        app:layout_constraintBottom_toTopOf="@+id/etPais"
+        app:layout_constraintEnd_toEndOf="@+id/etDuracion"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/etDuracion"
+        app:layout_constraintTop_toBottomOf="@+id/etDuracion"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
         android:id="@+id/textViewPais"
         android:layout_width="wrap_content"
         android:layout_height="35dp"
@@ -275,14 +287,13 @@
         android:id="@+id/imageButtonNext"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginTop="21dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"
         android:backgroundTint="#A2E046"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etRating"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@android:drawable/ic_menu_directions" />
 
     <ImageButton
