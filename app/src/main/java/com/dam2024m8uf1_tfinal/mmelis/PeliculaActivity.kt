@@ -3,16 +3,14 @@ package com.dam2024m8uf1_tfinal.mmelis
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
+import com.dam2024m8uf1_tfinal.mmelis.singleton.MovieRepository
 
 class PeliculaActivity : AppCompatActivity() {
 
-    private val peliculaViewModel: PeliculaViewModel by viewModels()
-
     // Listas de directores y países
-    private val listaDirectores = listOf("Director 1", "Director 2", "Director 3") // Rellena con tus datos
+    private val listaDirectores =
+        listOf("Director 1", "Director 2", "Director 3") // Rellena con tus datos
     private val listaPaises = listOf("España", "Francia", "Estados Unidos") // Rellena con tus datos
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,7 +28,8 @@ class PeliculaActivity : AppCompatActivity() {
         val etRating: RatingBar = findViewById(R.id.etRating)
 
         // Configurar los Spinners
-        val directorAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listaDirectores)
+        val directorAdapter =
+            ArrayAdapter(this, android.R.layout.simple_spinner_item, listaDirectores)
         directorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         etDirector.adapter = directorAdapter
 
@@ -38,69 +37,36 @@ class PeliculaActivity : AppCompatActivity() {
         paisAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         etPais.adapter = paisAdapter
 
-        // Observadores para LiveData
-        peliculaViewModel.titulo.observe(this, Observer {
-            etTitulo.setText(it)
-        })
-
-        peliculaViewModel.director.observe(this, Observer {
-            // Aquí puedes establecer el director en el Spinner si lo necesitas
-        })
-
-        peliculaViewModel.anioLanzamiento.observe(this, Observer {
-            etAnioLanzamiento.setText(it)
-        })
-
-        peliculaViewModel.genero.observe(this, Observer {
-            // Aquí puedes manejar el género si lo necesitas
-        })
-
-        peliculaViewModel.duracion.observe(this, Observer {
-            etDuracion.progress = it ?: 0
-            textViewDuracionValor.text = "Duración: ${it ?: 0} min" // Actualiza el TextView
-        })
-
-        peliculaViewModel.pais.observe(this, Observer {
-            // Aquí puedes establecer el país en el Spinner si lo necesitas
-        })
-
-        peliculaViewModel.clasificacionEdad.observe(this, Observer {
-            etClasificacionEdad.isChecked = it
-        })
-
-        peliculaViewModel.rating.observe(this, Observer {
-            etRating.rating = it
-        })
-
         // Listener para el SeekBar
         etDuracion.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                textViewDuracionValor.text = "Duración: $progress min" // Actualiza el TextView al cambiar el SeekBar
+                textViewDuracionValor.text =
+                    "Duración: $progress min" // Actualiza el TextView al cambiar el SeekBar
             }
 
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-                // Puedes dejarlo vacío si no necesitas hacer nada al iniciar el seguimiento
-            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
 
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-                // Puedes dejarlo vacío si no necesitas hacer nada al detener el seguimiento
-            }
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
         // Listener para guardar datos y navegar a la siguiente actividad
         findViewById<ImageButton>(R.id.imageButtonNext).setOnClickListener {
-            peliculaViewModel.setTitulo(etTitulo.text.toString())
-            peliculaViewModel.setDirector(etDirector.selectedItem.toString())
-            peliculaViewModel.setAnioLanzamiento(etAnioLanzamiento.text.toString())
-            peliculaViewModel.setGenero(getSelectedGenero(etGenero))
-            peliculaViewModel.setDuracion(etDuracion.progress)
-            peliculaViewModel.setPais(etPais.selectedItem.toString())
-            peliculaViewModel.setClasificacionEdad(etClasificacionEdad.isChecked)
-            peliculaViewModel.setRating(etRating.rating)
+            // Crea una nueva película con los datos ingresados
+            val pelicula = Pelicula(
+                titulo = etTitulo.text.toString(),
+                director = etDirector.selectedItem.toString(),
+                añoLanzamiento = etAnioLanzamiento.text.toString().toIntOrNull() ?: 0,
+                genero = getSelectedGenero(etGenero),
+                duracion = etDuracion.progress,
+                paisOrigen = etPais.selectedItem.toString(),
+                clasificacionEdad = if (etClasificacionEdad.isChecked) "Apto para todo público" else "No apto para todo público",
+                rating = etRating.rating
+            )
 
-            peliculaViewModel.guardarPelicula()
-
-            // Navegar a activity_crear_pelicula1
+// Asignar la película al repositorio
+            MovieRepository.getInstance().currentMovie = pelicula
+            MovieRepository.getInstance().addMovie(pelicula)
+// Navegar a activity_crear_pelicula1
             val intent = Intent(this, CrearPelicula1Activity::class.java)
             startActivity(intent)
         }

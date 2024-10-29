@@ -6,6 +6,7 @@ import com.dam2024m8uf1_tfinal.mmelis.Pelicula
 class MovieRepository {
     // List to store movies
     private val movieList = mutableListOf<Pelicula>()
+    lateinit var currentMovie: Pelicula
 
     // Private constructor to prevent instantiation from outside
     private constructor()

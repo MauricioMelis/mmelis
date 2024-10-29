@@ -14,6 +14,7 @@ import android.widget.Spinner
 import android.widget.Switch
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.dam2024m8uf1_tfinal.mmelis.singleton.MovieRepository
 import java.util.*
 
 class CrearPelicula1Activity : AppCompatActivity() {
@@ -27,7 +28,6 @@ class CrearPelicula1Activity : AppCompatActivity() {
     private lateinit var etAñadir: ImageButton
     private lateinit var etCancel: ImageButton
 
-    // Lista de actores (puedes agregar tus propios actores)
     private val listaActores = listOf("Actor 1", "Actor 2", "Actor 3")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +36,12 @@ class CrearPelicula1Activity : AppCompatActivity() {
 
         Log.d("CrearPelicula1Activity", "onCreate: Activity started")
 
-        // Inicializar vistas
+        initViews()
+        setupActorSpinner()
+        setupListeners()
+    }
+
+    private fun initViews() {
         etActorPrincipal = findViewById(R.id.etActorPrincipal)
         etSinopsis = findViewById(R.id.etSinopsis)
         etDate = findViewById(R.id.etDate)
@@ -45,25 +50,25 @@ class CrearPelicula1Activity : AppCompatActivity() {
         etOriginal = findViewById(R.id.etOriginal)
         etAñadir = findViewById(R.id.etAñadir)
         etCancel = findViewById(R.id.etCancel)
+    }
 
-        // Configurar el Spinner con la lista de actores
+    private fun setupActorSpinner() {
         val actorAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, listaActores)
         actorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         etActorPrincipal.adapter = actorAdapter
+    }
 
-        // Manejar el clic en el botón para agregar la película
+    private fun setupListeners() {
         etAñadir.setOnClickListener {
             Log.d("CrearPelicula1Activity", "Añadir button clicked")
             crearPelicula()
         }
 
-        // Manejar el clic en el botón para cancelar y volver al menú principal
         etCancel.setOnClickListener {
             Log.d("CrearPelicula1Activity", "Cancel button clicked")
             volverAlMenuPrincipal()
         }
 
-        // Manejar el clic en el botón para elegir la fecha
         etDate.setOnClickListener {
             mostrarDatePickerDialog()
         }
@@ -75,12 +80,9 @@ class CrearPelicula1Activity : AppCompatActivity() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-            // Actualiza el botón con la fecha seleccionada
+        DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
             etDate.text = "$selectedDay/${selectedMonth + 1}/$selectedYear"
-        }, year, month, day)
-
-        datePickerDialog.show()
+        }, year, month, day).show()
     }
 
     private fun crearPelicula() {
@@ -100,46 +102,33 @@ class CrearPelicula1Activity : AppCompatActivity() {
 
         // Convertir subtitulos a Boolean
         val tieneSubtitulos = when (subtitulos) {
-            "Sí" -> true // Si el texto es "Sí", asignar true
-            "No" -> false // Si el texto es "No", asignar false
-            else -> false // Por defecto, asignar false si no hay coincidencia
+            "Sí" -> true
+            "No" -> false
+            else -> false
         }
 
-        // Crear la nueva película (implementa la lógica según tu modelo de datos)
-        val nuevaPelicula = Pelicula(
-            titulo = MovieData.titulo,
-            director = MovieData.director,
-            añoLanzamiento = MovieData.añoLanzamiento,
-            genero = MovieData.genero,
-            duracion = MovieData.duracion,
-            paisOrigen = MovieData.paisOrigen,
-            clasificacionEdad = MovieData.clasificacionEdad,
-            rating = MovieData.rating,
-            actorPrincipal = actorPrincipal,
-            sinopsis = sinopsis,
-            fechaVisualizacion = MovieData.fechaVisualizacion,
-            esFavorita = favorita,
-            tieneSubtitulos = tieneSubtitulos,
-            esOriginal = original
-        )
+        val currentMovie = MovieRepository.getInstance().currentMovie
+        currentMovie.actorPrincipal = actorPrincipal
+        currentMovie.sinopsis = sinopsis
+        currentMovie.esFavorita = favorita
+        currentMovie.tieneSubtitulos = tieneSubtitulos
+        currentMovie.esOriginal = original
 
-        // Agregar la película a tu base de datos o lista de películas
 
-        // Mostrar mensaje de éxito
-        Toast.makeText(this, "Película creada con éxito.", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Película añadida exitosamente", Toast.LENGTH_SHORT).show()
 
-        // Volver a la actividad principal (opcional)
+
         volverAlMenuPrincipal()
     }
+
 
     private fun volverAlMenuPrincipal() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
-        finish() // Opcional, cierra la actividad actual
+        finish() // Opcional
     }
 
     override fun onBackPressed() {
-        // Opcionalmente puedes añadir lógica personalizada aquí
         super.onBackPressed() // Esto devolverá a la actividad anterior
     }
 }

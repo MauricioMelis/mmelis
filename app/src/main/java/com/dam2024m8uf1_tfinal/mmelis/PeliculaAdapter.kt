@@ -1,21 +1,23 @@
 package com.dam2024m8uf1_tfinal.mmelis
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class PeliculaAdapter(private val peliculas: MutableList<Pelicula>) :
+class PeliculaAdapter(private var peliculas: MutableList<Pelicula>) :
     RecyclerView.Adapter<PeliculaAdapter.PeliculaViewHolder>() {
 
     private var selectedPosition = -1
 
     // Crea la vista del ViewHolder
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PeliculaViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_1, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pelicula, parent, false)
         return PeliculaViewHolder(view)
     }
+
 
     // Asigna datos a cada elemento de la lista
     override fun onBindViewHolder(holder: PeliculaViewHolder, position: Int) {
@@ -26,13 +28,10 @@ class PeliculaAdapter(private val peliculas: MutableList<Pelicula>) :
         holder.itemView.setBackgroundColor(if (selectedPosition == holder.adapterPosition) 0xFFCCFFCC.toInt() else 0xFFFFFFFF.toInt())
 
         holder.itemView.setOnClickListener {
-            // Usar holder.adapterPosition para obtener la posición actual
             selectedPosition = holder.adapterPosition
-            notifyDataSetChanged() // Notifica que los datos han cambiado para actualizar la vista
+            notifyDataSetChanged() // Actualiza la vista
         }
     }
-
-
 
     // Devuelve el número de elementos en la lista
     override fun getItemCount(): Int {
@@ -44,12 +43,20 @@ class PeliculaAdapter(private val peliculas: MutableList<Pelicula>) :
         return selectedPosition
     }
 
+    // Método para actualizar la lista de películas
+    fun updateMovies(newMovies: MutableList<Pelicula>) {
+        peliculas = newMovies
+        notifyDataSetChanged() // Notifica que los datos han cambiado para refrescar la vista
+    }
+
     // Clase interna para manejar cada elemento de la lista
     inner class PeliculaViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val textView: TextView = itemView.findViewById(android.R.id.text1)
+        private val textTitulo: TextView = itemView.findViewById(R.id.textTitulo)
 
         fun bind(pelicula: Pelicula) {
-            textView.text = pelicula.titulo // Muestra solo el título en este caso
+            Log.d("PeliculaAdapter", "Título de la película: ${pelicula.titulo}")
+            textTitulo.text = pelicula.titulo
         }
     }
+
 }

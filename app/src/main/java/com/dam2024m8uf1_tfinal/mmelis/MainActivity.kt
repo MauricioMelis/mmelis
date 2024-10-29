@@ -2,11 +2,14 @@ package com.dam2024m8uf1_tfinal.mmelis
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dam2024m8uf1_tfinal.mmelis.singleton.MovieRepository
 
 class MainActivity : AppCompatActivity() {
 
@@ -24,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         // Inicializa el RecyclerView y el adaptador
         recyclerViewPeliculas = findViewById(R.id.recyclerViewPeliculas)
         recyclerViewPeliculas.layoutManager = LinearLayoutManager(this)
-        peliculaAdapter = PeliculaAdapter(MovieData.peliculas) // Asegúrate de tener la lista de películas en MovieData
+        peliculaAdapter = PeliculaAdapter(MovieRepository.getInstance().getMovies().toMutableList()) // Usa la lista del repositorio
         recyclerViewPeliculas.adapter = peliculaAdapter
 
         // Inicializa los botones
@@ -35,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         // Configura los listeners para los botones
         buttonAdd.setOnClickListener {
             // Abre la actividad para añadir una nueva película
-            val intent = Intent(this, PeliculaActivity::class.java)
+            val intent = Intent(this, PeliculaActivity::class.java) // Asegúrate de usar la actividad correcta
             startActivity(intent)
         }
 
@@ -44,12 +47,12 @@ class MainActivity : AppCompatActivity() {
             val selectedPosition = peliculaAdapter.getSelectedPosition()
             if (selectedPosition != -1) {
                 // Abre la actividad para editar la película seleccionada
-                val intent = Intent(this, PeliculaActivity::class.java)
+                val intent = Intent(this, PeliculaActivity::class.java) // Asegúrate de usar la actividad correcta
                 intent.putExtra("position", selectedPosition) // Pasa la posición de la película seleccionada
                 startActivity(intent)
             } else {
                 // Muestra un mensaje de error si no hay ninguna película seleccionada
-                // Puedes usar un Toast o un AlertDialog para esto
+                Toast.makeText(this, "Por favor, selecciona una película para editar.", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -58,11 +61,20 @@ class MainActivity : AppCompatActivity() {
             val selectedPosition = peliculaAdapter.getSelectedPosition()
             if (selectedPosition != -1) {
                 // Elimina la película de la lista
-                MovieData.peliculas.removeAt(selectedPosition)
+                val movieToDelete = MovieRepository.getInstance().getMovies()[selectedPosition]
+                MovieRepository.getInstance().deleteMovie(movieToDelete)
                 peliculaAdapter.notifyItemRemoved(selectedPosition)
             } else {
                 // Muestra un mensaje de error si no hay ninguna película seleccionada
+                Toast.makeText(this, "Por favor, selecciona una película para eliminar.", Toast.LENGTH_SHORT).show()
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val peliculas = MovieRepository.getInstance().getMovies()
+        Log.d("MainActivity", "Lista de películas: $peliculas")
+        peliculaAdapter.updateMovies(peliculas.toMutableList()) // Asegúrate de convertirla en MutableList si es necesario
     }
 }
