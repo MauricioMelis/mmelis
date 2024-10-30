@@ -107,19 +107,25 @@ class CrearPelicula1Activity : AppCompatActivity() {
             else -> false
         }
 
+        // Obtener currentMovie
         val currentMovie = MovieRepository.getInstance().currentMovie
-        currentMovie.actorPrincipal = actorPrincipal
-        currentMovie.sinopsis = sinopsis
-        currentMovie.esFavorita = favorita
-        currentMovie.tieneSubtitulos = tieneSubtitulos
-        currentMovie.esOriginal = original
 
+        // Verificar que currentMovie no sea nulo antes de acceder a sus propiedades
+        if (currentMovie != null) {
+            currentMovie.actorPrincipal = actorPrincipal
+            currentMovie.sinopsis = sinopsis
+            currentMovie.esFavorita = favorita
+            currentMovie.tieneSubtitulos = tieneSubtitulos
+            currentMovie.esOriginal = original
 
-        Toast.makeText(this, "Película añadida exitosamente", Toast.LENGTH_SHORT).show()
-
+            Toast.makeText(this, "Película actualizada exitosamente", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "No se puede actualizar la película, no hay película actual.", Toast.LENGTH_SHORT).show()
+        }
 
         volverAlMenuPrincipal()
     }
+
 
 
     private fun volverAlMenuPrincipal() {

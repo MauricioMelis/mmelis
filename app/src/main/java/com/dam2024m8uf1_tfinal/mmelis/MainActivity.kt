@@ -43,18 +43,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         buttonEdit.setOnClickListener {
-            // Obtiene la película seleccionada
             val selectedPosition = peliculaAdapter.getSelectedPosition()
             if (selectedPosition != -1) {
-                // Abre la actividad para editar la película seleccionada
-                val intent = Intent(this, PeliculaActivity::class.java) // Asegúrate de usar la actividad correcta
-                intent.putExtra("position", selectedPosition) // Pasa la posición de la película seleccionada
+                val selectedMovie = MovieRepository.getInstance().getMovies()[selectedPosition]
+
+                val intent = Intent(this, PeliculaActivity::class.java)
+                intent.putExtra("position", selectedPosition) // Posición en la lista
+                intent.putExtra("movie", selectedMovie) // Pasa la película seleccionada
                 startActivity(intent)
             } else {
-                // Muestra un mensaje de error si no hay ninguna película seleccionada
                 Toast.makeText(this, "Por favor, selecciona una película para editar.", Toast.LENGTH_SHORT).show()
             }
         }
+
+
 
         buttonDelete.setOnClickListener {
             // Obtiene la película seleccionada
