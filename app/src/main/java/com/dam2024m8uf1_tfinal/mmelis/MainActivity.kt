@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var buttonEdit: Button
     private lateinit var buttonDelete: Button
 
-    private lateinit var peliculaAdapter: PeliculaAdapter // Asegúrate de tener un adaptador para el RecyclerView
+    private lateinit var peliculaAdapter: PeliculaAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,10 @@ class MainActivity : AppCompatActivity() {
         // Inicializa el RecyclerView y el adaptador
         recyclerViewPeliculas = findViewById(R.id.recyclerViewPeliculas)
         recyclerViewPeliculas.layoutManager = LinearLayoutManager(this)
-        peliculaAdapter = PeliculaAdapter(MovieRepository.getInstance().getMovies().toMutableList()) // Usa la lista del repositorio
+        peliculaAdapter = PeliculaAdapter(MovieRepository.getInstance().getMovies().toMutableList()) { position ->
+            // Manejo del clic en la película
+            onMovieSelected(position)
+        }
         recyclerViewPeliculas.adapter = peliculaAdapter
 
         // Inicializa los botones
@@ -37,29 +40,31 @@ class MainActivity : AppCompatActivity() {
 
         // Configura los listeners para los botones
         buttonAdd.setOnClickListener {
-            // Abre la actividad para añadir una nueva película
-            val intent = Intent(this, PeliculaActivity::class.java) // Asegúrate de usar la actividad correcta
+            // Abre PeliculaActivity para crear una nueva película
+            val intent = Intent(this, PeliculaActivity::class.java)
+            intent.putExtra("isEdit", false) // Modo creación
             startActivity(intent)
         }
 
         buttonEdit.setOnClickListener {
             val selectedPosition = peliculaAdapter.getSelectedPosition()
             if (selectedPosition != -1) {
+                // Abre PeliculaActivity para ver y editar la película
                 val selectedMovie = MovieRepository.getInstance().getMovies()[selectedPosition]
-
-                val intent = Intent(this, PeliculaActivity::class.java)
-                intent.putExtra("position", selectedPosition) // Posición en la lista
-                intent.putExtra("movie", selectedMovie) // Pasa la película seleccionada
+                val intent = Intent(this, PeliculaActivity::class.java).apply {
+                    putExtra("isEdit", true) // Modo edición
+                    putExtra("position", selectedPosition) // Pasa la posición de la película
+                    putExtra("titulo", selectedMovie.titulo)
+                    putExtra("anioLanzamiento", selectedMovie.añoLanzamiento)
+                    putExtra("sinopsis", selectedMovie.sinopsis)
+                }
                 startActivity(intent)
             } else {
-                Toast.makeText(this, "Por favor, selecciona una película para editar.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Selecciona una película para editar.", Toast.LENGTH_SHORT).show()
             }
         }
 
-
-
         buttonDelete.setOnClickListener {
-            // Obtiene la película seleccionada
             val selectedPosition = peliculaAdapter.getSelectedPosition()
             if (selectedPosition != -1) {
                 // Elimina la película de la lista
@@ -77,6 +82,11 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         val peliculas = MovieRepository.getInstance().getMovies()
         Log.d("MainActivity", "Lista de películas: $peliculas")
-        peliculaAdapter.updateMovies(peliculas.toMutableList()) // Asegúrate de convertirla en MutableList si es necesario
+        peliculaAdapter.updateMovies(peliculas.toMutableList())
+    }
+
+    // Manejo de la selección de la película
+    private fun onMovieSelected(position: Int) {
+        // Aquí puedes manejar lo que desees hacer cuando se selecciona una película
     }
 }

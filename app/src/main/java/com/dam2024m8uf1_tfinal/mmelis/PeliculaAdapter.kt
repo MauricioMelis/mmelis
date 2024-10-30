@@ -7,8 +7,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class PeliculaAdapter(private var peliculas: MutableList<Pelicula>) :
-    RecyclerView.Adapter<PeliculaAdapter.PeliculaViewHolder>() {
+class PeliculaAdapter(
+    private var peliculas: MutableList<Pelicula>,
+    private val onMovieClick: (Int) -> Unit // Callback para manejar el clic
+) : RecyclerView.Adapter<PeliculaAdapter.PeliculaViewHolder>() {
 
     private var selectedPosition = -1
 
@@ -17,7 +19,6 @@ class PeliculaAdapter(private var peliculas: MutableList<Pelicula>) :
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pelicula, parent, false)
         return PeliculaViewHolder(view)
     }
-
 
     // Asigna datos a cada elemento de la lista
     override fun onBindViewHolder(holder: PeliculaViewHolder, position: Int) {
@@ -30,6 +31,7 @@ class PeliculaAdapter(private var peliculas: MutableList<Pelicula>) :
         holder.itemView.setOnClickListener {
             selectedPosition = holder.adapterPosition
             notifyDataSetChanged() // Actualiza la vista
+            onMovieClick(holder.adapterPosition) // Llama al callback con la posición seleccionada
         }
     }
 
@@ -58,5 +60,4 @@ class PeliculaAdapter(private var peliculas: MutableList<Pelicula>) :
             textTitulo.text = pelicula.titulo
         }
     }
-
 }

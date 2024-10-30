@@ -4,15 +4,7 @@ import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.Spinner
-import android.widget.Switch
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.dam2024m8uf1_tfinal.mmelis.singleton.MovieRepository
 import java.util.*
@@ -39,6 +31,7 @@ class CrearPelicula1Activity : AppCompatActivity() {
         initViews()
         setupActorSpinner()
         setupListeners()
+
     }
 
     private fun initViews() {
@@ -80,61 +73,46 @@ class CrearPelicula1Activity : AppCompatActivity() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-            etDate.text = "$selectedDay/${selectedMonth + 1}/$selectedYear"
-        }, year, month, day).show()
+        val datePickerDialog =
+            DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
+                val fechaSeleccionada = "${selectedDay}/${selectedMonth + 1}/$selectedYear"
+                etDate.text = fechaSeleccionada
+            }, year, month, day)
+
+        datePickerDialog.show()
     }
 
     private fun crearPelicula() {
-        // Obtener datos de las vistas
-        val actorPrincipal = etActorPrincipal.selectedItem.toString()
-        val sinopsis = etSinopsis.text.toString()
-        val favorita = etFavorita.isChecked
-        val subtitulosSeleccion = findViewById<RadioButton>(etSubtitulos.checkedRadioButtonId)
-        val subtitulos = subtitulosSeleccion?.text.toString()
-        val original = etOriginal.isChecked
+        val pelicula = MovieRepository.getInstance().currentMovie ?: return
+        Log.d("CrearPelicula1Activity", "Pelicula en CrearPelicula1Activity: $pelicula")
+        if (pelicula == null) {
+            Log.e("CrearPelicula1Activity", "currentMovie es null")
+        }
+        pelicula.actorPrincipal = etActorPrincipal.selectedItem.toString()
+        pelicula.sinopsis = etSinopsis.text.toString()
+        pelicula.fechaVisualizacion = etDate.text.toString()
+        pelicula.esFavorita = etFavorita.isChecked
 
-        // Validar datos
-        if (sinopsis.isEmpty()) {
-            Toast.makeText(this, "Por favor, ingresa una sinopsis.", Toast.LENGTH_SHORT).show()
-            return
+        // Cambiar la lógica para devolver un Boolean
+        pelicula.tieneSubtitulos = when (etSubtitulos.checkedRadioButtonId) {
+            R.id.radioSiSubtitulos -> true  // Asignar true si se selecciona "Sí"
+            R.id.radioNoSubtitulos -> false  // Asignar false si se selecciona "No"
+            else -> false // Por defecto a false
         }
 
-        // Convertir subtitulos a Boolean
-        val tieneSubtitulos = when (subtitulos) {
-            "Sí" -> true
-            "No" -> false
-            else -> false
-        }
+        pelicula.esOriginal = etOriginal.isChecked
 
-        // Obtener currentMovie
-        val currentMovie = MovieRepository.getInstance().currentMovie
+        // Guardar en el repositorio o en la base de datos
+        MovieRepository.getInstance().addMovie(pelicula)
 
-        // Verificar que currentMovie no sea nulo antes de acceder a sus propiedades
-        if (currentMovie != null) {
-            currentMovie.actorPrincipal = actorPrincipal
-            currentMovie.sinopsis = sinopsis
-            currentMovie.esFavorita = favorita
-            currentMovie.tieneSubtitulos = tieneSubtitulos
-            currentMovie.esOriginal = original
-
-            Toast.makeText(this, "Película actualizada exitosamente", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(this, "No se puede actualizar la película, no hay película actual.", Toast.LENGTH_SHORT).show()
-        }
-
-        volverAlMenuPrincipal()
+        // Ir a la actividad principal después de añadir
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
-
 
 
     private fun volverAlMenuPrincipal() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish() // Opcional
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed() // Esto devolverá a la actividad anterior
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 }

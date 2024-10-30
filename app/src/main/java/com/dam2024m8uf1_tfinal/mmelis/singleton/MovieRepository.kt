@@ -34,7 +34,11 @@ class MovieRepository {
         movieList.add(movie) // Agregar nueva película
         Log.i("MovieRepository", "Movie added: ${movie.titulo}")
     }
-
+    fun updateMovie(position: Int, updatedMovie: Pelicula) {
+        if (position in 0 until movieList.size) {
+            movieList[position] = updatedMovie // Asumiendo que 'movies' es tu lista de películas
+        }
+    }
 
     // Method to get all movies
     fun getMovies(): List<Pelicula> = movieList.toList()
