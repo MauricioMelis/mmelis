@@ -45,6 +45,19 @@ class PeliculaAdapter(
         return selectedPosition
     }
 
+    fun removeMovie(position: Int) {
+        if (position in peliculas.indices) {
+            peliculas.removeAt(position) // Elimina la película de la lista interna
+            notifyItemRemoved(position) // Notifica al adaptador sobre la eliminación
+            notifyItemRangeChanged(position, itemCount) // Actualiza el rango de elementos
+        }
+    }
+
+    fun clearSelectedPosition() {
+        selectedPosition = -1
+        notifyDataSetChanged() // Refresca la vista para quitar el resaltado
+    }
+
     // Método para actualizar la lista de películas
     fun updateMovies(newMovies: MutableList<Pelicula>) {
         peliculas = newMovies

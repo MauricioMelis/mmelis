@@ -31,7 +31,6 @@ class CrearPelicula1Activity : AppCompatActivity() {
         initViews()
         setupActorSpinner()
         setupListeners()
-
     }
 
     private fun initViews() {
@@ -54,7 +53,7 @@ class CrearPelicula1Activity : AppCompatActivity() {
     private fun setupListeners() {
         etAñadir.setOnClickListener {
             Log.d("CrearPelicula1Activity", "Añadir button clicked")
-            crearPelicula()
+            agregarDetallesPelicula()
         }
 
         etCancel.setOnClickListener {
@@ -73,43 +72,36 @@ class CrearPelicula1Activity : AppCompatActivity() {
         val month = calendar.get(Calendar.MONTH)
         val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog =
-            DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-                val fechaSeleccionada = "${selectedDay}/${selectedMonth + 1}/$selectedYear"
-                etDate.text = fechaSeleccionada
-            }, year, month, day)
+        val datePickerDialog = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
+            val fechaSeleccionada = "${selectedDay}/${selectedMonth + 1}/$selectedYear"
+            etDate.text = fechaSeleccionada
+        }, year, month, day)
 
         datePickerDialog.show()
     }
 
-    private fun crearPelicula() {
+    private fun agregarDetallesPelicula() {
         val pelicula = MovieRepository.getInstance().currentMovie ?: return
-        Log.d("CrearPelicula1Activity", "Pelicula en CrearPelicula1Activity: $pelicula")
-        if (pelicula == null) {
-            Log.e("CrearPelicula1Activity", "currentMovie es null")
-        }
+        Log.d("CrearPelicula1Activity", "Current movie in repository: $pelicula")
+
         pelicula.actorPrincipal = etActorPrincipal.selectedItem.toString()
         pelicula.sinopsis = etSinopsis.text.toString()
         pelicula.fechaVisualizacion = etDate.text.toString()
         pelicula.esFavorita = etFavorita.isChecked
 
-        // Cambiar la lógica para devolver un Boolean
         pelicula.tieneSubtitulos = when (etSubtitulos.checkedRadioButtonId) {
-            R.id.radioSiSubtitulos -> true  // Asignar true si se selecciona "Sí"
-            R.id.radioNoSubtitulos -> false  // Asignar false si se selecciona "No"
-            else -> false // Por defecto a false
+            R.id.radioSiSubtitulos -> true
+            R.id.radioNoSubtitulos -> false
+            else -> false
         }
 
         pelicula.esOriginal = etOriginal.isChecked
 
-        // Guardar en el repositorio o en la base de datos
-        MovieRepository.getInstance().addMovie(pelicula)
+        MovieRepository.getInstance().addMovie(pelicula) // Guarda la película en la lista
 
-        // Ir a la actividad principal después de añadir
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
-
 
     private fun volverAlMenuPrincipal() {
         startActivity(Intent(this, MainActivity::class.java))
