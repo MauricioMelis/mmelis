@@ -17,4 +17,4 @@ data class Pelicula(
     var esFavorita: Boolean = false,
     var tieneSubtitulos: Boolean = false,
     var esOriginal: Boolean = false
-) : Serializable // Asegúrate de que la clase sea serializable si necesitas pasarla entre actividades
+) : Serializable

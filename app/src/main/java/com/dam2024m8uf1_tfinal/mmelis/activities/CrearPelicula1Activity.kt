@@ -48,7 +48,6 @@ class CrearPelicula1Activity : AppCompatActivity() {
 
         Log.d("CrearPelicula1Activity", "isEditMode: $isEditMode, position: $moviePosition")
 
-        // Importante: Recuperar currentMovie aquí
         if (isEditMode) {
             val currentMovie = MovieRepository.getInstance().currentMovie
             Log.d("CrearPelicula1Activity", "Current movie: ${currentMovie?.titulo}")

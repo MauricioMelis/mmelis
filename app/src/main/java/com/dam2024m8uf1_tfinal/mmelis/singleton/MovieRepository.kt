@@ -19,7 +19,6 @@ class MovieRepository {
         }
     }
 
-    // Method to add or update a movie based on currentMovie
     fun addMovie(movie: Pelicula) {
         // Verificamos si currentMovie está inicializado y coincide con el título de la película editada
         if (::currentMovie.isInitialized) {
@@ -40,13 +39,10 @@ class MovieRepository {
         }
     }
 
-    // Method to get all movies
     fun getMovies(): List<Pelicula> = movieList.toList()
 
-    // Optional: Method to get a movie by position, if needed elsewhere
     fun getMovieAt(position: Int): Pelicula? = movieList.getOrNull(position)
 
-    // Method to delete a movie by instance
     fun deleteMovie(movie: Pelicula) {
         if (movieList.remove(movie)) {
             Log.i("MovieRepository", "Movie deleted: ${movie.titulo}")
