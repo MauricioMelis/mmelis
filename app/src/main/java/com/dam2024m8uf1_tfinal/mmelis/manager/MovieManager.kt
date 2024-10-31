@@ -22,16 +22,13 @@ class MovieManager(
 
     }
 
-
     fun editMovie(selectedPosition: Int) {
         if (selectedPosition != -1) {
             val selectedMovie = MovieRepository.getInstance().getMovies()[selectedPosition]
+            MovieRepository.getInstance().currentMovie = selectedMovie  // Añadir esta línea
             val intent = Intent(activity, PeliculaActivity::class.java).apply {
                 putExtra("isEdit", true)
                 putExtra("position", selectedPosition)
-                putExtra("titulo", selectedMovie.titulo)
-                putExtra("anioLanzamiento", selectedMovie.añoLanzamiento)
-                putExtra("sinopsis", selectedMovie.sinopsis)
             }
             activity.startActivity(intent)
         } else {

@@ -33,11 +33,14 @@ class PeliculaActivity : AppCompatActivity() {
         setupSpinner(etDirector, listaDirectores)
         setupSpinner(etPais, listaPaises)
 
+        isEditMode = intent.getBooleanExtra("isEdit", false)
         moviePosition = intent.getIntExtra("position", -1)
-        if (moviePosition != -1) {
-            isEditMode = true
+
+        // Si estamos en modo edición, asegurarnos de que currentMovie esté establecido
+        if (isEditMode && moviePosition != -1) {
             val selectedMovie = MovieRepository.getInstance().getMovieAt(moviePosition)
             selectedMovie?.let {
+                MovieRepository.getInstance().currentMovie = it
                 populateFields(it)
             }
         }
@@ -46,29 +49,36 @@ class PeliculaActivity : AppCompatActivity() {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 textViewDuracionValor.text = "Duración: $progress min"
             }
-
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
         findViewById<ImageButton>(R.id.imageButtonNext).setOnClickListener {
-            // Validar campos antes de proceder
             if (!validateInputs(etTitulo, etAnioLanzamiento, etDuracion, etRating, radioGroupGenero)) {
                 Toast.makeText(this, "Por favor, completa todos los campos obligatorios.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            val pelicula = createMovieFromInput(etTitulo, etDirector, etAnioLanzamiento, radioGroupGenero, etDuracion, etPais, etClasificacionEdad, etRating)
-            MovieRepository.getInstance().currentMovie = pelicula
+            val pelicula = createMovieFromInput(etTitulo, etDirector, etAnioLanzamiento,
+                radioGroupGenero, etDuracion, etPais, etClasificacionEdad, etRating)
 
+            // Preservar los datos adicionales si estamos en modo edición
             if (isEditMode) {
-                MovieRepository.getInstance().updateMovie(moviePosition, pelicula)
-            } else {
-                MovieRepository.getInstance().addMovie(pelicula)
-                Log.d("PeliculaActivity", "Current Movie: $pelicula")
+                val currentMovie = MovieRepository.getInstance().currentMovie
+                pelicula.actorPrincipal = currentMovie.actorPrincipal
+                pelicula.sinopsis = currentMovie.sinopsis
+                pelicula.fechaVisualizacion = currentMovie.fechaVisualizacion
+                pelicula.esFavorita = currentMovie.esFavorita
+                pelicula.tieneSubtitulos = currentMovie.tieneSubtitulos
+                pelicula.esOriginal = currentMovie.esOriginal
             }
 
-            startActivity(Intent(this, CrearPelicula1Activity::class.java))
+            MovieRepository.getInstance().currentMovie = pelicula
+
+            val intent = Intent(this, CrearPelicula1Activity::class.java)
+            intent.putExtra("isEdit", isEditMode)
+            intent.putExtra("position", moviePosition)
+            startActivity(intent)
         }
 
         findViewById<ImageButton>(R.id.imageButtonCancel).setOnClickListener {
@@ -81,6 +91,35 @@ class PeliculaActivity : AppCompatActivity() {
         val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, data)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
+    }
+
+    private fun populateFields(movie: Pelicula) {
+        val etTitulo: EditText = findViewById(R.id.etTitulo)
+        val etDirector: Spinner = findViewById(R.id.etDirector)
+        val etAnioLanzamiento: EditText = findViewById(R.id.etAñoLanzamiento)
+        val etDuracion: SeekBar = findViewById(R.id.etDuracion)
+        val textViewDuracionValor: TextView = findViewById(R.id.textViewDuracionValor)
+        val etPais: Spinner = findViewById(R.id.etPais)
+        val etClasificacionEdad: ToggleButton = findViewById(R.id.etClasificacionEdad)
+        val etRating: RatingBar = findViewById(R.id.etRating)
+        val radioGroupGenero: RadioGroup = findViewById(R.id.radioGroupGenero)
+
+        etTitulo.setText(movie.titulo)
+        etDirector.setSelection(listaDirectores.indexOf(movie.director))
+        etAnioLanzamiento.setText(movie.añoLanzamiento.toString())
+        etDuracion.progress = movie.duracion
+        textViewDuracionValor.text = "Duración: ${movie.duracion} min"
+        etPais.setSelection(listaPaises.indexOf(movie.paisOrigen))
+        etClasificacionEdad.isChecked = movie.clasificacionEdad == "Apto para todo público"
+        etRating.rating = movie.rating
+
+        when (movie.genero) {
+            "Acción" -> radioGroupGenero.check(R.id.radioButtonAccion)
+            "Comedia" -> radioGroupGenero.check(R.id.radioButtonComedia)
+            "Drama" -> radioGroupGenero.check(R.id.radioButtonDrama)
+            "Terror" -> radioGroupGenero.check(R.id.radioButtonTerror)
+            else -> radioGroupGenero.clearCheck()
+        }
     }
 
     private fun createMovieFromInput(
@@ -105,34 +144,6 @@ class PeliculaActivity : AppCompatActivity() {
         )
     }
 
-    private fun populateFields(movie: Pelicula) {
-        val etTitulo: EditText = findViewById(R.id.etTitulo)
-        val etDirector: Spinner = findViewById(R.id.etDirector)
-        val etAnioLanzamiento: EditText = findViewById(R.id.etAñoLanzamiento)
-        val etDuracion: SeekBar = findViewById(R.id.etDuracion)
-        val etPais: Spinner = findViewById(R.id.etPais)
-        val etClasificacionEdad: ToggleButton = findViewById(R.id.etClasificacionEdad)
-        val etRating: RatingBar = findViewById(R.id.etRating)
-        val radioGroupGenero: RadioGroup = findViewById(R.id.radioGroupGenero)
-
-        etTitulo.setText(movie.titulo)
-        etDirector.setSelection(listaDirectores.indexOf(movie.director))
-        etAnioLanzamiento.setText(movie.añoLanzamiento.toString())
-        etDuracion.progress = movie.duracion
-        etPais.setSelection(listaPaises.indexOf(movie.paisOrigen))
-        etClasificacionEdad.isChecked = movie.clasificacionEdad == "Apto para todo público"
-        etRating.rating = movie.rating
-
-        // Seleccionar el RadioButton según el género
-        when (movie.genero) {
-            "Acción" -> radioGroupGenero.check(R.id.radioButtonAccion)
-            "Comedia" -> radioGroupGenero.check(R.id.radioButtonComedia)
-            "Drama" -> radioGroupGenero.check(R.id.radioButtonDrama)
-            "Terror" -> radioGroupGenero.check(R.id.radioButtonTerror)
-            else -> radioGroupGenero.clearCheck()  // Si no hay género, no selecciona ninguno
-        }
-    }
-
     private fun getSelectedGenero(radioGroupGenero: RadioGroup): String {
         return when (radioGroupGenero.checkedRadioButtonId) {
             R.id.radioButtonAccion -> "Acción"
@@ -148,35 +159,29 @@ class PeliculaActivity : AppCompatActivity() {
         etAnioLanzamiento: EditText,
         etDuracion: SeekBar,
         etRating: RatingBar,
-        radioGroupGenero: RadioGroup // Añadir el RadioGroup como parámetro
+        radioGroupGenero: RadioGroup
     ): Boolean {
-        // Verificar que el título no esté vacío
         if (etTitulo.text.isBlank()) {
             return false
         }
 
-        // Verificar que el año de lanzamiento sea un número válido
         val anioLanzamiento = etAnioLanzamiento.text.toString().toIntOrNull()
         if (anioLanzamiento == null || anioLanzamiento <= 0) {
             return false
         }
 
-        // Verificar que la duración sea mayor que 0
         if (etDuracion.progress <= 0) {
             return false
         }
 
-        // Verificar que el rating sea mayor que 0
         if (etRating.rating <= 0) {
             return false
         }
 
-        // Verificar que se haya seleccionado un género
         if (radioGroupGenero.checkedRadioButtonId == -1) {
-            return false // Ningún botón de radio seleccionado
+            return false
         }
 
         return true
     }
-
 }
