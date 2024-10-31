@@ -1,4 +1,4 @@
-package com.dam2024m8uf1_tfinal.mmelis
+package com.dam2024m8uf1_tfinal.mmelis.activities
 
 import android.app.DatePickerDialog
 import android.content.Intent
@@ -8,6 +8,8 @@ import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.dam2024m8uf1_tfinal.mmelis.`object`.Pelicula
+import com.dam2024m8uf1_tfinal.mmelis.R
 import com.dam2024m8uf1_tfinal.mmelis.singleton.MovieRepository
 import java.util.*
 

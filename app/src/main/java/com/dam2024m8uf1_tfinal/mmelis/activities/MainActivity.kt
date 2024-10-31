@@ -1,14 +1,14 @@
-package com.dam2024m8uf1_tfinal.mmelis
+package com.dam2024m8uf1_tfinal.mmelis.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dam2024m8uf1_tfinal.mmelis.R
+import com.dam2024m8uf1_tfinal.mmelis.adapter.PeliculaAdapter
 import com.dam2024m8uf1_tfinal.mmelis.manager.MovieManager
 import com.dam2024m8uf1_tfinal.mmelis.singleton.MovieRepository
 

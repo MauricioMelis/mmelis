@@ -1,10 +1,11 @@
-package com.dam2024m8uf1_tfinal.mmelis
+package com.dam2024m8uf1_tfinal.mmelis.activities
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import com.dam2024m8uf1_tfinal.mmelis.`object`.Pelicula
+import com.dam2024m8uf1_tfinal.mmelis.R
 import com.dam2024m8uf1_tfinal.mmelis.singleton.MovieRepository
 
 class PeliculaActivity : AppCompatActivity() {

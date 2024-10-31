@@ -1,4 +1,4 @@
-package com.dam2024m8uf1_tfinal.mmelis
+package com.dam2024m8uf1_tfinal.mmelis.`object`
 
 import java.io.Serializable
 

@@ -1,7 +1,7 @@
 package com.dam2024m8uf1_tfinal.mmelis.singleton
 
 import android.util.Log
-import com.dam2024m8uf1_tfinal.mmelis.Pelicula
+import com.dam2024m8uf1_tfinal.mmelis.`object`.Pelicula
 
 class MovieRepository {
     private val movieList = mutableListOf<Pelicula>()
