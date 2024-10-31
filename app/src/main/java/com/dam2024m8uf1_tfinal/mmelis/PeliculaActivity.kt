@@ -9,8 +9,8 @@ import com.dam2024m8uf1_tfinal.mmelis.singleton.MovieRepository
 
 class PeliculaActivity : AppCompatActivity() {
 
-    private val listaDirectores = listOf("Director 1", "Director 2", "Director 3") // Rellena con tus datos
-    private val listaPaises = listOf("España", "Francia", "Estados Unidos") // Rellena con tus datos
+    private val listaDirectores = listOf("Director 1", "Director 2", "Director 3")
+    private val listaPaises = listOf("España", "Francia", "Estados Unidos")
 
     private var isEditMode = false
     private var moviePosition: Int = -1
@@ -23,28 +23,25 @@ class PeliculaActivity : AppCompatActivity() {
         val etTitulo: EditText = findViewById(R.id.etTitulo)
         val etDirector: Spinner = findViewById(R.id.etDirector)
         val etAnioLanzamiento: EditText = findViewById(R.id.etAñoLanzamiento)
-        val etGenero: LinearLayout = findViewById(R.id.etGenero)
+        val radioGroupGenero: RadioGroup = findViewById(R.id.radioGroupGenero)
         val etDuracion: SeekBar = findViewById(R.id.etDuracion)
         val textViewDuracionValor: TextView = findViewById(R.id.textViewDuracionValor)
         val etPais: Spinner = findViewById(R.id.etPais)
         val etClasificacionEdad: ToggleButton = findViewById(R.id.etClasificacionEdad)
         val etRating: RatingBar = findViewById(R.id.etRating)
 
-        // Configurar los Spinners
         setupSpinner(etDirector, listaDirectores)
         setupSpinner(etPais, listaPaises)
 
-        // Obtener datos de la intención
         moviePosition = intent.getIntExtra("position", -1)
         if (moviePosition != -1) {
             isEditMode = true
             val selectedMovie = MovieRepository.getInstance().getMovieAt(moviePosition)
             selectedMovie?.let {
-                populateFields(it) // Rellena los campos con los datos de la película
+                populateFields(it)
             }
         }
 
-        // Listener para el SeekBar
         etDuracion.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 textViewDuracionValor.text = "Duración: $progress min"
@@ -54,9 +51,14 @@ class PeliculaActivity : AppCompatActivity() {
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
 
-        // Listener para guardar datos y navegar a la siguiente actividad
         findViewById<ImageButton>(R.id.imageButtonNext).setOnClickListener {
-            val pelicula = createMovieFromInput(etTitulo, etDirector, etAnioLanzamiento, etGenero, etDuracion, etPais, etClasificacionEdad, etRating)
+            // Validar campos antes de proceder
+            if (!validateInputs(etTitulo, etAnioLanzamiento, etDuracion, etRating, radioGroupGenero)) {
+                Toast.makeText(this, "Por favor, completa todos los campos obligatorios.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            val pelicula = createMovieFromInput(etTitulo, etDirector, etAnioLanzamiento, radioGroupGenero, etDuracion, etPais, etClasificacionEdad, etRating)
             MovieRepository.getInstance().currentMovie = pelicula
 
             if (isEditMode) {
@@ -64,14 +66,11 @@ class PeliculaActivity : AppCompatActivity() {
             } else {
                 MovieRepository.getInstance().addMovie(pelicula)
                 Log.d("PeliculaActivity", "Current Movie: $pelicula")
-
             }
 
-            // Navegar a CrearPelicula1Activity
             startActivity(Intent(this, CrearPelicula1Activity::class.java))
         }
 
-        // Listener para el botón de cancelación que regresa a MainActivity
         findViewById<ImageButton>(R.id.imageButtonCancel).setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
             finish()
@@ -88,7 +87,7 @@ class PeliculaActivity : AppCompatActivity() {
         etTitulo: EditText,
         etDirector: Spinner,
         etAnioLanzamiento: EditText,
-        etGenero: LinearLayout,
+        radioGroupGenero: RadioGroup,
         etDuracion: SeekBar,
         etPais: Spinner,
         etClasificacionEdad: ToggleButton,
@@ -98,7 +97,7 @@ class PeliculaActivity : AppCompatActivity() {
             titulo = etTitulo.text.toString(),
             director = etDirector.selectedItem.toString(),
             añoLanzamiento = etAnioLanzamiento.text.toString().toIntOrNull() ?: 0,
-            genero = getSelectedGenero(etGenero),
+            genero = getSelectedGenero(radioGroupGenero),
             duracion = etDuracion.progress,
             paisOrigen = etPais.selectedItem.toString(),
             clasificacionEdad = if (etClasificacionEdad.isChecked) "Apto para todo público" else "No apto para todo público",
@@ -114,6 +113,7 @@ class PeliculaActivity : AppCompatActivity() {
         val etPais: Spinner = findViewById(R.id.etPais)
         val etClasificacionEdad: ToggleButton = findViewById(R.id.etClasificacionEdad)
         val etRating: RatingBar = findViewById(R.id.etRating)
+        val radioGroupGenero: RadioGroup = findViewById(R.id.radioGroupGenero)
 
         etTitulo.setText(movie.titulo)
         etDirector.setSelection(listaDirectores.indexOf(movie.director))
@@ -122,20 +122,61 @@ class PeliculaActivity : AppCompatActivity() {
         etPais.setSelection(listaPaises.indexOf(movie.paisOrigen))
         etClasificacionEdad.isChecked = movie.clasificacionEdad == "Apto para todo público"
         etRating.rating = movie.rating
+
+        // Seleccionar el RadioButton según el género
+        when (movie.genero) {
+            "Acción" -> radioGroupGenero.check(R.id.radioButtonAccion)
+            "Comedia" -> radioGroupGenero.check(R.id.radioButtonComedia)
+            "Drama" -> radioGroupGenero.check(R.id.radioButtonDrama)
+            "Terror" -> radioGroupGenero.check(R.id.radioButtonTerror)
+            else -> radioGroupGenero.clearCheck()  // Si no hay género, no selecciona ninguno
+        }
     }
 
-    private fun getSelectedGenero(linearLayout: LinearLayout): String {
-        val radioButtonAccion: RadioButton = findViewById(R.id.radioButtonAccion)
-        val radioButtonComedia: RadioButton = findViewById(R.id.radioButtonComedia)
-        val radioButtonDrama: RadioButton = findViewById(R.id.radioButtonDrama)
-        val radioButtonTerror: RadioButton = findViewById(R.id.radioButtonTerror)
-
-        return when {
-            radioButtonAccion.isChecked -> "Acción"
-            radioButtonComedia.isChecked -> "Comedia"
-            radioButtonDrama.isChecked -> "Drama"
-            radioButtonTerror.isChecked -> "Terror"
+    private fun getSelectedGenero(radioGroupGenero: RadioGroup): String {
+        return when (radioGroupGenero.checkedRadioButtonId) {
+            R.id.radioButtonAccion -> "Acción"
+            R.id.radioButtonComedia -> "Comedia"
+            R.id.radioButtonDrama -> "Drama"
+            R.id.radioButtonTerror -> "Terror"
             else -> "Sin género"
         }
     }
+
+    private fun validateInputs(
+        etTitulo: EditText,
+        etAnioLanzamiento: EditText,
+        etDuracion: SeekBar,
+        etRating: RatingBar,
+        radioGroupGenero: RadioGroup // Añadir el RadioGroup como parámetro
+    ): Boolean {
+        // Verificar que el título no esté vacío
+        if (etTitulo.text.isBlank()) {
+            return false
+        }
+
+        // Verificar que el año de lanzamiento sea un número válido
+        val anioLanzamiento = etAnioLanzamiento.text.toString().toIntOrNull()
+        if (anioLanzamiento == null || anioLanzamiento <= 0) {
+            return false
+        }
+
+        // Verificar que la duración sea mayor que 0
+        if (etDuracion.progress <= 0) {
+            return false
+        }
+
+        // Verificar que el rating sea mayor que 0
+        if (etRating.rating <= 0) {
+            return false
+        }
+
+        // Verificar que se haya seleccionado un género
+        if (radioGroupGenero.checkedRadioButtonId == -1) {
+            return false // Ningún botón de radio seleccionado
+        }
+
+        return true
+    }
+
 }

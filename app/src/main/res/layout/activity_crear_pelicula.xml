@@ -121,60 +121,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textViewAñoLanzamiento" />
 
-    <LinearLayout
-        android:id="@+id/etGenero"
+    <RadioGroup
+        android:id="@+id/radioGroupGenero"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="@+id/textViewGenero"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.74"
+        app:layout_constraintHorizontal_bias="0.84"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etAñoLanzamiento">
+        app:layout_constraintTop_toTopOf="@+id/textViewGenero">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RadioButton
+            android:id="@+id/radioButtonAccion"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:text="Acción"
+            android:textSize="10sp" />
 
-            <RadioButton
-                android:id="@+id/radioButtonAccion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Acción"
-                android:textSize="15dp" />
-
-            <RadioButton
-                android:id="@+id/radioButtonComedia"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Comedia"
-                android:textSize="15dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <RadioButton
+            android:id="@+id/radioButtonComedia"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="35dp"
-            android:orientation="vertical"> <!-- Espaciado entre columnas -->
+            android:text="Comedia"
+            android:textSize="10sp" />
 
-            <RadioButton
-                android:id="@+id/radioButtonDrama"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Drama"
-                android:textSize="15dp" />
+        <RadioButton
+            android:id="@+id/radioButtonDrama"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Drama"
+            android:textSize="10sp" />
 
-            <RadioButton
-                android:id="@+id/radioButtonTerror"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Terror"
-                android:textSize="15dp" />
-        </LinearLayout>
+        <RadioButton
+            android:id="@+id/radioButtonTerror"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:text="Terror"
+            android:textSize="10sp" />
 
-    </LinearLayout>
+    </RadioGroup>
+
+
 
     <TextView
         android:id="@+id/textViewDuracion"

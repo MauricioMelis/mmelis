@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <!-- Imagen de identificación a la izquierda -->
+    <ImageView
+        android:id="@+id/imageIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:src="@drawable/movie" />
+
+    <!-- Título de la película -->
     <TextView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/textTitulo"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:textSize="16sp" />
+        android:layout_weight="1"
+        android:textSize="16sp"
+        android:text="Título de la película"
+        android:padding="8dp" />
+</LinearLayout>
